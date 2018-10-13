@@ -1,0 +1,45 @@
+﻿@model IEnumerable<FlatProject6.Models.FlatCounterViewModel>
+
+@{
+    ViewBag.Title = "Today";
+}
+
+<h2>Today</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FlatId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FlatXpathName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CounterSerialNumber)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FlatId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FlatXpathName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CounterSerialNumber)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<FlatProject7.Models.FlatCounterDataViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Flats</h2>
+@*
+    <h3>Streets</h3>
+    @Html.DropDownList("Street", ViewBag.Streets as SelectList, new { id = "state" })
+    <h3>Houses</h3>
+    @Html.DropDownList("HouseNumber", ViewBag.HouseNumbers as SelectList, new { id = "city" })
+*@
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Flat.Street)</th>
+        <th>@Html.DisplayNameFor(model => model.Flat.HouseNumber)</th>
+        <th>@Html.DisplayNameFor(model => model.Flat.FlatNumber)</th>
+        <th>@Html.DisplayNameFor(model => model.Counter.SerialNumber)</th>
+        <th>@Html.DisplayNameFor(model => model.CounterData.Value)</th>
+        <th>@Html.DisplayNameFor(model => model.CounterData.MeasureDateTime)</th>
+        <th>Counters</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Flat.Street)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Flat.HouseNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Flat.FlatNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Counter.SerialNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CounterData.Value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CounterData.MeasureDateTime)
+            </td>
+            <td>
+                @Html.ActionLink("AddData", "AddData", new { item.Counter.Id/* id=item.PrimaryKey */ }) |
+            </td>
+            <td>
+                @Html.ActionLink("Update", "UpdateFlatCounter", new { FlatId = item.Flat.Id, CounterId = item.Counter.Id })
+            </td>
+            <td>
+                @Html.ActionLink("History", "GetUpdateCountersHistory", new { FlatId = item.Flat.Id, CounterId = item.Counter.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+<script>
+    function CallChangefunc(val, flatId) {
+        //window.location.href = "/Controller/UpdateFlatCounter?value=" + val;
+        alert("val=" + val, "flatId=" + flatId);
+    }
+</script>

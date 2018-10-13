@@ -1,0 +1,50 @@
+﻿@model IEnumerable<FlatProject7.Models.CounterUpdateHistory>
+
+@{
+    ViewBag.Title = "GetUpdateCountersHistory";
+}
+
+<h2>GetUpdateCountersHistory</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OldCounterId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NewCounterId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OldCounterValue)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FlatId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OldCounterId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NewCounterId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OldCounterValue)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FlatId)
+        </td>        
+    </tr>
+}
+
+</table>
