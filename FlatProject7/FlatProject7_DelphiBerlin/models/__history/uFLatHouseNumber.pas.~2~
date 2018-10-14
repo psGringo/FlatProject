@@ -1,0 +1,19 @@
+unit uFLatHouseNumber;
+
+interface
+
+uses
+  System.Classes, uFlat, uHouseNumber;
+
+type
+  TFlatHouseNumber = class(TComponent)
+  private
+  protected
+  public
+  published
+  end;
+
+implementation
+
+end.
+

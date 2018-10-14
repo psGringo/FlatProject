@@ -1,0 +1,53 @@
+unit uFLatHouseNumber;
+
+interface
+
+uses
+  System.Classes, uFlat, uHouseNumber;
+
+type
+  TFlatHouseNumber = class(TComponent)
+  private
+    FFlat: TFlat;
+    FHouseNumber: THouseNumber;
+    procedure SetFlat(const Value: TFlat);
+    procedure SetHouseNumber(const Value: THouseNumber);
+  protected
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    property Flat: TFlat read FFlat write SetFlat;
+    property HouseNumber: THouseNumber read FHouseNumber write SetHouseNumber;
+  published
+  end;
+
+implementation
+
+{ TFlatHouseNumber }
+
+constructor TFlatHouseNumber.Create(AOwner: TComponent);
+begin
+  inherited;
+  Flat := TFlat.Create(Self);
+  HouseNumber := THouseNumber.Create(Self);
+end;
+
+destructor TFlatHouseNumber.Destroy;
+begin
+  Flat.Free();
+  HouseNumber.Free();
+  inherited;
+end;
+
+procedure TFlatHouseNumber.SetFlat(const Value: TFlat);
+begin
+  FFlat := Value;
+end;
+
+procedure TFlatHouseNumber.SetHouseNumber(const Value: THouseNumber);
+begin
+  FHouseNumber := Value;
+end;
+
+end.
+

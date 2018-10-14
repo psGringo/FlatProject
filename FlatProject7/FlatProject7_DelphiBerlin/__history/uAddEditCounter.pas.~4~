@@ -1,0 +1,35 @@
+unit uAddEditCounter;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons,
+  Vcl.Mask, Vcl.DBCtrls, Vcl.ComCtrls;
+
+type
+  TAddEditCounter = class(TForm)
+    eSerialNumber: TDBEdit;
+    lSerialNumber: TLabel;
+    bOk: TBitBtn;
+    bCancel: TBitBtn;
+    Label1: TLabel;
+    Label2: TLabel;
+    dtpLast: TDateTimePicker;
+    dtpNext: TDateTimePicker;
+  private
+    { Private declarations }
+    Fid: integer;
+  public
+    { Public declarations }
+  end;
+
+var
+  AddEditCounter: TAddEditCounter;
+
+implementation
+
+{$R *.dfm}
+
+end.
+

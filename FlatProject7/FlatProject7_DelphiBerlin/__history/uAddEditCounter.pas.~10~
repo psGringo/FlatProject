@@ -1,0 +1,60 @@
+unit uAddEditCounter;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons,
+  Vcl.Mask, Vcl.DBCtrls, Vcl.ComCtrls;
+
+type
+  TAddEditCounter = class(TForm)
+    eSerialNumber: TDBEdit;
+    lSerialNumber: TLabel;
+    bOk: TBitBtn;
+    bCancel: TBitBtn;
+    Label1: TLabel;
+    Label2: TLabel;
+    dtpLast: TDateTimePicker;
+    dtpNext: TDateTimePicker;
+    procedure bOkClick(Sender: TObject);
+    procedure bCancelClick(Sender: TObject);
+  private
+    { Private declarations }
+    Fid: integer;
+    procedure SetId(const Value: integer);
+  public
+    { Public declarations }
+    constructor Create(AOwner: TComponent); override;
+    property Id: integer read FId write SetId;
+  end;
+
+implementation
+
+{$R *.dfm}
+
+{ TAddEditCounter }
+
+procedure TAddEditCounter.bCancelClick(Sender: TObject);
+begin
+  ModalResult := mrCancel;
+end;
+
+procedure TAddEditCounter.bOkClick(Sender: TObject);
+begin
+  ModalResult := mrOk;
+end;
+
+constructor TAddEditCounter.Create(AOwner: TComponent);
+begin
+  inherited;
+  Fid := -1;
+end;
+
+procedure TAddEditCounter.SetId(const Value: integer);
+begin
+  FId := Value;
+end;
+
+end.
+

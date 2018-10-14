@@ -1,0 +1,310 @@
+object FlatsFrame: TFlatsFrame
+  Left = 0
+  Top = 0
+  Width = 658
+  Height = 317
+  TabOrder = 0
+  object pTop: TPanel
+    Left = 0
+    Top = 25
+    Width = 658
+    Height = 33
+    Align = alTop
+    TabOrder = 0
+    ExplicitTop = 0
+    ExplicitWidth = 544
+    object cbFlatNumbers: TDBLookupComboBox
+      AlignWithMargins = True
+      Left = 311
+      Top = 4
+      Width = 97
+      Height = 21
+      Align = alLeft
+      KeyField = 'id'
+      ListField = 'flatNumber'
+      ListSource = DSFlatNumbers
+      TabOrder = 0
+      ExplicitLeft = 336
+    end
+    object cbStreets: TDBLookupComboBox
+      AlignWithMargins = True
+      Left = 4
+      Top = 4
+      Width = 160
+      Height = 21
+      Align = alLeft
+      KeyField = 'id'
+      ListField = 'name'
+      ListSource = DSStreets
+      TabOrder = 1
+      OnCloseUp = cbStreetsCloseUp
+      ExplicitTop = 6
+    end
+    object cbHouseNumbers: TDBLookupComboBox
+      AlignWithMargins = True
+      Left = 170
+      Top = 4
+      Width = 135
+      Height = 21
+      Align = alLeft
+      KeyField = 'id'
+      ListField = 'name'
+      ListSource = DSHouseNumbers
+      TabOrder = 2
+      OnCloseUp = cbHouseNumbersCloseUp
+    end
+    object bFilter: TButton
+      AlignWithMargins = True
+      Left = 414
+      Top = 4
+      Width = 75
+      Height = 25
+      Align = alLeft
+      Caption = #1060#1080#1083#1100#1090#1088
+      TabOrder = 3
+      ExplicitLeft = 470
+      ExplicitTop = -4
+      ExplicitHeight = 31
+    end
+    object bFlushFilter: TButton
+      AlignWithMargins = True
+      Left = 495
+      Top = 4
+      Width = 114
+      Height = 25
+      Align = alLeft
+      Caption = #1057#1073#1088#1086#1089#1080#1090#1100' '#1092#1080#1083#1100#1090#1088
+      TabOrder = 4
+    end
+  end
+  object DBGrid: TDBGrid
+    Left = 0
+    Top = 58
+    Width = 658
+    Height = 259
+    Align = alClient
+    DataSource = DSFlats
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'streetName'
+        Title.Caption = #1059#1083#1080#1094#1072
+        Width = 150
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'houseNumberName'
+        Title.Caption = #1044#1086#1084
+        Width = 80
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'flatNumber'
+        Title.Caption = #1050#1074#1072#1088#1090#1080#1088#1072
+        Width = 80
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'lastCounterDataValue'
+        Title.Caption = #1047#1085#1072#1095#1077#1085#1080#1077' '#1089#1095#1077#1090#1095#1080#1082#1072
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'measureDateTime'
+        Title.Caption = #1044#1072#1090#1072' '#1080#1079#1084#1077#1088#1077#1085#1080#1103
+        Visible = True
+      end>
+  end
+  object pPanelTop: TPanel
+    Left = 0
+    Top = 0
+    Width = 658
+    Height = 25
+    Align = alTop
+    Caption = 'pPanelTop'
+    ShowCaption = False
+    TabOrder = 2
+    object lStreets: TLabel
+      AlignWithMargins = True
+      Left = 4
+      Top = 4
+      Width = 160
+      Height = 17
+      Align = alLeft
+      Caption = #1059#1083#1080#1094#1099
+    end
+    object lHouseNumbers: TLabel
+      AlignWithMargins = True
+      Left = 170
+      Top = 4
+      Width = 135
+      Height = 17
+      Align = alLeft
+      Caption = #1053#1086#1084#1077#1088#1072' '#1076#1086#1084#1086#1074
+    end
+    object lFlats: TLabel
+      AlignWithMargins = True
+      Left = 311
+      Top = 4
+      Width = 97
+      Height = 17
+      Align = alLeft
+      Caption = #1050#1074#1072#1088#1090#1080#1088#1099
+    end
+  end
+  object FDConnectionTemp: TFDConnection
+    Params.Strings = (
+      'Database=flat_db'
+      'User_Name=root'
+      'Password=masterkey'
+      'DriverID=MySQL')
+    Connected = True
+    Left = 48
+    Top = 104
+  end
+  object DSFlats: TDataSource
+    DataSet = qFlats
+    Left = 80
+    Top = 224
+  end
+  object qFlats: TFDQuery
+    Active = True
+    Connection = FDConnectionTemp
+    SQL.Strings = (
+      'SELECT'
+      's.name as streetName,'
+      'hn.name as houseNumberName,'
+      'f.id as flatId,'
+      'f.flatNumber,'
+      '#counterData'
+      'cd.value as lastCounterDataValue,'
+      'cd.measureDateTime  '
+      'FROM '
+      'flat_db.flats f, '
+      'counters c,'
+      'counterdata cd,'
+      'housenumbers hn,'
+      'streets s'
+      'where f.counters_id=c.id'
+      'and cd.counters_id=c.id'
+      'and f.houseNumbers_id=hn.id'
+      'and hn.streets_id=s.id'
+      
+        'and cd.id = ( select Max(Id) from counterdata where counters_id=' +
+        '(Select counters_id from flats where id=f.id));')
+    Left = 64
+    Top = 160
+  end
+  object qStreets: TFDQuery
+    Active = True
+    Connection = FDConnectionTemp
+    SQL.Strings = (
+      'select*from streets')
+    Left = 168
+    Top = 136
+  end
+  object DSStreets: TDataSource
+    DataSet = qStreets
+    Left = 184
+    Top = 208
+  end
+  object qHouseNumbers: TFDQuery
+    Connection = FDConnectionTemp
+    SQL.Strings = (
+      'SELECT * FROM flat_db.housenumbers where streets_id=:streets_id;')
+    Left = 256
+    Top = 168
+    ParamData = <
+      item
+        Name = 'STREETS_ID'
+        DataType = ftWideString
+        ParamType = ptInput
+        Value = '%%'
+      end>
+  end
+  object DSHouseNumbers: TDataSource
+    DataSet = qHouseNumbers
+    Left = 272
+    Top = 240
+  end
+  object qFlatNumbers: TFDQuery
+    Connection = FDConnectionTemp
+    SQL.Strings = (
+      
+        'SELECT * FROM flat_db.flats where houseNumbers_id=:houseNumbers_' +
+        'id;')
+    Left = 352
+    Top = 184
+    ParamData = <
+      item
+        Name = 'HOUSENUMBERS_ID'
+        DataType = ftWideString
+        ParamType = ptInput
+        Value = '%%'
+      end>
+  end
+  object DSFlatNumbers: TDataSource
+    DataSet = qFlatNumbers
+    Left = 368
+    Top = 256
+  end
+  object qFlatsFilter: TFDQuery
+    Connection = FDConnectionTemp
+    SQL.Strings = (
+      'SELECT'
+      's.name as streetName,'
+      'hn.name as houseNumberName,'
+      'f.id as flatId,'
+      'f.flatNumber,'
+      '#counterData'
+      'cd.value as lastCounterDataValue,'
+      'cd.measureDateTime  '
+      'FROM '
+      'flat_db.flats f, '
+      'counters c,'
+      'counterdata cd,'
+      'housenumbers hn,'
+      'streets s'
+      'where f.counters_id=c.id'
+      'and cd.counters_id=c.id'
+      'and f.houseNumbers_id=hn.id'
+      'and hn.streets_id=s.id'
+      'and s.id=:street_id'
+      'and hn.id=:houseNumber_id'
+      'and f.id=:flatNumber_id'
+      
+        'and cd.id = ( select Max(Id) from counterdata where counters_id=' +
+        '(Select counters_id from flats where id=f.id));')
+    Left = 488
+    Top = 176
+    ParamData = <
+      item
+        Name = 'STREET_ID'
+        ParamType = ptInput
+      end
+      item
+        Name = 'HOUSENUMBER_ID'
+        ParamType = ptInput
+      end
+      item
+        Name = 'FLATNUMBER_ID'
+        ParamType = ptInput
+      end>
+  end
+  object DS: TDataSource
+    DataSet = qFlatsFilter
+    Left = 504
+    Top = 240
+  end
+end

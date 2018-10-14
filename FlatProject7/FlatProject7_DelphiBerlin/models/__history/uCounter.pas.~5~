@@ -1,0 +1,57 @@
+unit uCounter;
+
+interface
+
+uses
+  System.Classes;
+
+type
+  TCounter = class(TComponent)
+  private
+    FNextCheckDate: TDateTime;
+    FSerialNumber: string;
+    FLastCheckDate: TDateTime;
+    FId: integer;
+    procedure SetLastCheckDate(const Value: TDateTime);
+    procedure SetNextCheckDate(const Value: TDateTime);
+    procedure SetSerialNumber(const Value: string);
+    procedure SetId(const Value: integer);
+  { private declarations }
+  protected
+  { protected declarations }
+  public
+  { public declarations }
+    property Id:integer read FId write SetId;
+    property SerialNumber: string read FSerialNumber write SetSerialNumber;
+    property LastCheckDate: TDateTime read FLastCheckDate write SetLastCheckDate;
+    property NextCheckDate: TDateTime read FNextCheckDate write SetNextCheckDate;
+  published
+  { published declarations }
+  end;
+
+implementation
+
+{ TCounter }
+
+procedure TCounter.SetId(const Value: integer);
+begin
+  FId := Value;
+end;
+
+procedure TCounter.SetLastCheckDate(const Value: TDateTime);
+begin
+  FLastCheckDate := Value;
+end;
+
+procedure TCounter.SetNextCheckDate(const Value: TDateTime);
+begin
+  FNextCheckDate := Value;
+end;
+
+procedure TCounter.SetSerialNumber(const Value: string);
+begin
+  FSerialNumber := Value;
+end;
+
+end.
+

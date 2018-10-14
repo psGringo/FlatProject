@@ -1,0 +1,86 @@
+﻿unit uCountersFrame;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
+  FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
+  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
+  FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  Vcl.StdCtrls, Vcl.DBCtrls, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.Buttons;
+
+type
+  TCountersFrame = class(TFrame)
+    DBGrid: TDBGrid;
+    FDConnectionTemp: TFDConnection;
+    tbit: TPanel;
+    qFlatNumbers: TFDQuery;
+    qCounters: TFDQuery;
+    qFlatsFilter: TFDQuery;
+    qHouseNumbers: TFDQuery;
+    qStreets: TFDQuery;
+    bAdd: TBitBtn;
+    bEdit: TBitBtn;
+    bDelete: TBitBtn;
+    DSFlats: TDataSource;
+    procedure bAddClick(Sender: TObject);
+    procedure bEditClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  uAddEditCounter, uDB, uCounter;
+
+procedure TCountersFrame.bAddClick(Sender: TObject);
+
+  procedure InsertCounter(aCounter: TCounter);
+  var
+    q: TFDQuery;
+  begin
+    q := TFDQuery.Create(Self);
+    with q do
+    begin
+      Connection := Db.FDConnection;
+      sql.Text := 'INSERT INTO `flat_db`.`counters` ' + //
+        '(`serialNumber`, `lastCheckDate`, `nextCheckDate`) ' + //
+        'VALUES (:serialNumber, :lastCheckDate, :nextCheckDate);';
+        params.ParamValues['serialNumber']:=
+    end;
+  end;
+
+var
+  f: TAddEditCounter;
+begin
+  f := TAddEditCounter.Create(Self);
+  if f.ShowModal = mrOK then
+  begin
+    //insert record
+    InsertCounter(f.eSerialNumber.Text, //
+      FormatDateTime('yyyy-mm-dd hh:mm:ss', f.dtpLast.DateTime), //
+      FormatDateTime('yyyy-mm-dd hh:mm:ss', f.dtpNext.DateTime) //
+    );
+  end;
+end;
+
+procedure TCountersFrame.bEditClick(Sender: TObject);
+
+  procedure getCounter();
+  begin
+
+  end;
+
+begin
+//
+end;
+
+end.
+

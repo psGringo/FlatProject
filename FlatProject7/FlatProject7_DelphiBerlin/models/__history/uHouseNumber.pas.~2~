@@ -1,0 +1,16 @@
+unit uHouseNumber;
+
+interface
+
+type
+  THouseNumber = class
+  private
+  protected
+  public
+  published
+  end;
+
+implementation
+
+end.
+

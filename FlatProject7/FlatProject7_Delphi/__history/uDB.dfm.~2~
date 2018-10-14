@@ -1,0 +1,5 @@
+object DB: TDB
+  OldCreateOrder = False
+  Height = 274
+  Width = 423
+end

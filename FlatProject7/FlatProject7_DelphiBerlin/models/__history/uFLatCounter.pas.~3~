@@ -1,0 +1,58 @@
+unit uFLatCounter;
+
+interface
+
+uses
+  System.Classes, //
+  //
+  uFlat, //
+  uHouseNumber, //
+  uCounter;
+
+type
+  TFLatCounter = class(TComponent)
+  private
+    FFlat: TFlat;
+    FCounter: TCounter;
+    procedure SetFlat(const Value: TFlat);
+    procedure SetCounter(const Value: TCounter);
+  protected
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    //
+    property Flat: TFlat read FFlat write SetFlat;
+    property Counter: TCounter read FCounter write SetCounter;
+  published
+  end;
+
+implementation
+
+{ TFlatHouseNumber }
+
+constructor TFLatCounter.Create(AOwner: TComponent);
+begin
+  inherited;
+  Flat := TFlat.Create(Self);
+  FCounter := TCounter.Create(Self);
+end;
+
+destructor TFLatCounter.Destroy;
+begin
+  Flat.Free();
+  FCounter.Free();
+  inherited;
+end;
+
+procedure TFLatCounter.SetCounter(const Value: TCounter);
+begin
+  FCounter := Value;
+end;
+
+procedure TFLatCounter.SetFlat(const Value: TFlat);
+begin
+  FFlat := Value;
+end;
+
+end.
+

@@ -1,0 +1,61 @@
+unit uMain;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
+  // my
+  uDb, //
+  uFlatsFrame, //
+  uCountersFrame; //
+
+type
+  TMainForm = class(TForm)
+    PageControl1: TPageControl;
+    tsFlats: TTabSheet;
+    tsCounters: TTabSheet;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+    FlatsFrame: TFlatsFrame;
+    CountersFrame: TCountersFrame;
+  public
+    constructor Create(AOwner: TComponent); override;
+    { Public declarations }
+  end;
+
+var
+  MainForm: TMainForm;
+
+implementation
+
+{$R *.dfm}
+
+constructor TMainForm.Create(AOwner: TComponent);
+begin
+  inherited;
+  ReportMemoryLeaksOnShutdown := true;
+end;
+
+procedure TMainForm.FormCreate(Sender: TObject);
+var
+  db: TDb;
+begin
+  db := Tdb.Create(Self);
+  FlatsFrame := TFlatsFrame.Create(Self);
+  FlatsFrame.Parent := tsFlats;
+  FlatsFrame.Align := alClient;
+  FlatsFrame.Init;
+  FlatsFrame.Show();
+  //
+  CountersFrame := TCountersFrame.Create(Self);
+  CountersFrame.Parent := tsCounters;
+  CountersFrame.Align := alClient;
+  CountersFrame.Init;
+  CountersFrame.Show();
+
+end;
+
+end.
+

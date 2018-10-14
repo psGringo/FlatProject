@@ -1,0 +1,39 @@
+unit uDB;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
+  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client;
+
+type
+  TDB = class(TDataModule)
+    FDConnection: TFDConnection;
+    FDPhysMySQLDriverLink: TFDPhysMySQLDriverLink;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure Connect();
+  end;
+
+var
+  DB: TDB;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+{ TDB }
+
+procedure TDB.Connect;
+begin
+//
+end;
+
+end.
+

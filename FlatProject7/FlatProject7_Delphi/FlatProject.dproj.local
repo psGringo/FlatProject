@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.400,=C:\Users\YellowFriend\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.034,=C:\Users\YellowFriend\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.344,=C:\Users\YellowFriend\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.882,=C:\Users\YellowFriend\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2018.10.13 18:35:25.441,=C:\Users\YellowFriend\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2018.10.13 18:35:46.449,C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\uMain.dfm=C:\Users\YellowFriend\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2018.10.13 18:35:46.449,C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\uMain.pas=C:\Users\YellowFriend\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2018.10.13 18:35:57.189,C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\FlatProject.dproj=C:\Users\YellowFriend\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2018.10.13 18:36:13.065,=C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\Unit1.pas</Transaction>
+    <Transaction>2018.10.13 18:36:26.660,C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\uDB.dfm=C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\Unit1.dfm</Transaction>
+    <Transaction>2018.10.13 18:36:26.660,C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\uDB.pas=C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\Unit1.pas</Transaction>
+    <Transaction>2018.10.13 19:09:55.308,=C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\Unit1.pas</Transaction>
+    <Transaction>2018.10.13 19:10:15.548,C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\uFlatsFrame.pas=C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\Unit1.pas</Transaction>
+    <Transaction>2018.10.13 19:10:15.548,C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\uFlatsFrame.dfm=C:\C#\FlatProject\FlatProject7\FlatProject7_Delphi\Unit1.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

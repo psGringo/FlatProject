@@ -1,0 +1,98 @@
+unit uCountersController;
+
+interface
+
+uses
+  uCounter;
+
+type
+  TCountersController = class
+  private
+  protected
+  public
+    class function GetCounter(aId: integer): TCounter;
+    class procedure InsertCounter(var aC: TCounter);
+    class procedure UpdateCounter(aC: TCounter; aId: integer);
+  published
+  end;
+
+implementation
+
+uses
+  FireDAC.Comp.Client, uDB, System.SysUtils;
+
+{ TCountersController }
+
+class function TCountersController.GetCounter(aId: integer): TCounter;
+var
+  q: TFDQuery;
+begin
+  q := TFDQuery.Create(nil);
+  Result := TCounter.Create;
+  try
+    with q do
+    begin
+      Connection := Db.FDConnection;
+      sql.Text := 'SELECT * FROM flat_db.counters where id=:id';
+      params.ParamValues['id'] := aId;
+      Disconnect();
+      Open();
+      Result.SerialNumber := FieldByName('serialNumber').AsString;
+      Result.LastCheckDate := FieldByName('lastCheckDate').AsDateTime;
+      Result.NextCheckDate := FieldByName('nextCheckDate').AsDateTime;
+      Close();
+    end;
+  finally
+    q.Free();
+  end;
+
+end;
+
+class procedure TCountersController.InsertCounter(var aC: TCounter);
+var
+  q: TFDQuery;
+begin
+  q := TFDQuery.Create(nil);
+  try
+    with q do
+    begin
+      Connection := Db.FDConnection;
+      sql.Text := 'INSERT INTO `flat_db`.`counters` ' + //
+        '(`serialNumber`, `lastCheckDate`, `nextCheckDate`) ' + //
+        'VALUES (:serialNumber, :lastCheckDate, :nextCheckDate);';
+      params.ParamValues['serialNumber'] := aC.SerialNumber;
+      params.ParamValues['lastCheckDate'] := FormatDateTime('yyyy-mm-dd hh:mm:ss', aC.LastCheckDate);
+      params.ParamValues['nextCheckDate'] := FormatDateTime('yyyy-mm-dd hh:mm:ss', aC.NextCheckDate);
+      ExecSQL();
+    end;
+  finally
+    q.Free();
+  end;
+
+end;
+
+class procedure TCountersController.UpdateCounter(aC: TCounter; aId: integer);
+var
+  q: TFDQuery;
+begin
+  q := TFDQuery.Create(nil);
+  try
+    with q do
+    begin
+      Connection := Db.FDConnection;
+      sql.Text := 'UPDATE `flat_db`.`counters` SET `serialNumber`=:serialNumber, ' + //
+        '`lastCheckDate`=:lastCheckDate, `nextCheckDate`=:nextCheckDate WHERE `id`=:id;';
+      params.ParamValues['serialNumber'] := aC.SerialNumber;
+      params.ParamValues['lastCheckDate'] := FormatDateTime('yyyy-mm-dd hh:mm:ss', aC.LastCheckDate);
+      params.ParamValues['nextCheckDate'] := FormatDateTime('yyyy-mm-dd hh:mm:ss', aC.NextCheckDate);
+      params.ParamValues['id'] := aId;
+      ExecSQL();
+    end;
+  finally
+    q.Free();
+  end;
+
+end;
+
+end.
+

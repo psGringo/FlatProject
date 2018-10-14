@@ -14,12 +14,7 @@ namespace FlatProject7.Controllers
         DbFlatContext db = new DbFlatContext();
         // GET: Flats
         public ActionResult Index()
-        {
-            int selectedValue = 1;
-            SelectList streets = new SelectList(dbSQL.GetStreets(), "Id", "Name", selectedValue);
-            ViewBag.Streets = streets;
-            SelectList houseNumbers = new SelectList(dbSQL.GetHouseNumbers(selectedValue), "Id", "Name");
-            ViewBag.HouseNumbers = houseNumbers;
+        {            
             return View(dbSQL.GetTodayFlats());
         }
         

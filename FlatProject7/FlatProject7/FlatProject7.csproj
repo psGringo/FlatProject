@@ -161,6 +161,7 @@
     <Compile Include="Models\Flat.cs" />
     <Compile Include="Models\FlatCounterData.cs" />
     <Compile Include="Models\Db.cs" />
+    <Compile Include="Models\FlatsStreetsHouses.cs" />
     <Compile Include="Models\HouseNumber.cs" />
     <Compile Include="Models\Street.cs" />
     <Compile Include="Models\CountersToUpdate.cs" />
@@ -207,7 +208,6 @@
     <Content Include="Views\Flats\Index.cshtml" />
     <Content Include="Views\Flats\AddData.cshtml" />
     <Content Include="Views\Flats\EditFlat.cshtml" />
-    <Content Include="Views\Counters\Index.cshtml" />
     <Content Include="Views\Counters\Create.cshtml" />
     <Content Include="Views\Counters\Edit.cshtml" />
     <Content Include="Views\Flats\UpdateFlatCounter.cshtml" />

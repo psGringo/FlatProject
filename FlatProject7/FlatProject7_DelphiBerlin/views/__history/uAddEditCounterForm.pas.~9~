@@ -1,0 +1,165 @@
+unit uAddEditCounterForm;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons,
+  Vcl.Mask, Vcl.DBCtrls, Vcl.ComCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
+  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
+  FireDAC.DApt.Intf, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TAddEditCounterForm = class(TForm)
+    lSerialNumber: TLabel;
+    bOk: TBitBtn;
+    bCancel: TBitBtn;
+    Label1: TLabel;
+    Label2: TLabel;
+    dtpLast: TDateTimePicker;
+    dtpNext: TDateTimePicker;
+    eSerialNumber: TEdit;
+    cbIsAssociateToFlat: TCheckBox;
+    cbStreets: TDBLookupComboBox;
+    cbHouseNumbers: TDBLookupComboBox;
+    cbFlatNumbers: TDBLookupComboBox;
+    FDConnectionTemp: TFDConnection;
+    qStreets: TFDQuery;
+    DSStreets: TDataSource;
+    qHouseNumbers: TFDQuery;
+    DSHouseNumbers: TDataSource;
+    qFlatNumbers: TFDQuery;
+    DSFlatNumbers: TDataSource;
+    procedure bOkClick(Sender: TObject);
+    procedure bCancelClick(Sender: TObject);
+    procedure cbStreetsCloseUp(Sender: TObject);
+    procedure cbHouseNumbersCloseUp(Sender: TObject);
+  private
+    { Private declarations }
+    Fid: integer;
+    procedure SetId(const Value: integer);
+  public
+    { Public declarations }
+    constructor Create(AOwner: TComponent); override;
+    procedure Init;
+    procedure LoadStreetsInList();
+    procedure LoadHouseNumbersInList(aStreetId: integer);
+    procedure LoadFlatsInList(aHouseHumberId: integer);
+    property Id: integer read FId write SetId;
+  end;
+
+implementation
+
+uses
+  uDb;
+
+{$R *.dfm}
+
+{ TAddEditCounter }
+
+procedure TAddEditCounterForm.bCancelClick(Sender: TObject);
+begin
+  ModalResult := mrCancel;
+end;
+
+procedure TAddEditCounterForm.bOkClick(Sender: TObject);
+begin
+  ModalResult := mrOk;
+end;
+
+procedure TAddEditCounterForm.cbHouseNumbersCloseUp(Sender: TObject);
+begin
+  with qFlatNumbers do
+  begin
+    Connection := Db.FDConnection;
+    CachedUpdates := true;
+    params.ParamValues['houseNumbers_id'] := qHouseNumbers.FieldByName('id').AsInteger;
+    Disconnect();
+    Open();
+    cbFlatNumbers.KeyValue := qFlatNumbers.FieldByName('id').AsInteger;
+  end;
+end;
+
+procedure TAddEditCounterForm.cbStreetsCloseUp(Sender: TObject);
+begin
+  with qHouseNumbers do
+  begin
+    Connection := Db.FDConnection;
+    CachedUpdates := true;
+    params.ParamValues['streets_id'] := qStreets.FieldByName('id').AsInteger;
+    Disconnect();
+    Open();
+    cbHouseNumbers.KeyValue := qHouseNumbers.FieldByName('id').AsInteger;
+  end;
+  with qFlatNumbers do
+  begin
+    Connection := Db.FDConnection;
+    CachedUpdates := true;
+    params.ParamValues['houseNumbers_id'] := qHouseNumbers.FieldByName('id').AsInteger;
+    Disconnect();
+    Open();
+    cbFlatNumbers.KeyValue := qFlatNumbers.FieldByName('id').AsInteger;
+  end;
+end;
+
+constructor TAddEditCounterForm.Create(AOwner: TComponent);
+begin
+  inherited;
+  Fid := -1;
+end;
+
+procedure TAddEditCounterForm.Init;
+begin
+  FDConnectionTemp.Connected := false;
+  LoadStreetsInList();
+  LoadHouseNumbersInList(qStreets.FieldByName('id').AsInteger);
+  LoadFlatsInList(qHouseNumbers.FieldByName('id').AsInteger);
+end;
+
+procedure TAddEditCounterForm.LoadStreetsInList;
+begin
+  with qStreets do
+  begin
+    Connection := Db.FDConnection;
+    CachedUpdates := true;
+    Disconnect();
+    Open();
+    cbStreets.KeyValue := qStreets.FieldByName('id').AsInteger;
+  end;
+end;
+
+procedure TAddEditCounterForm.LoadFlatsInList(aHouseHumberId: integer);
+begin
+  with qFlatNumbers do
+  begin
+    Connection := Db.FDConnection;
+    CachedUpdates := true;
+    params.ParamValues['houseNumbers_id'] := aHouseHumberId; //
+    Disconnect();
+    Open();
+    cbFlatNumbers.KeyValue := qFlatNumbers.FieldByName('id').AsInteger;
+  end;
+end;
+
+procedure TAddEditCounterForm.LoadHouseNumbersInList(aStreetId: integer);
+begin
+  with qHouseNumbers do
+  begin
+    Connection := Db.FDConnection;
+    CachedUpdates := true;
+    params.ParamValues['streets_id'] := aStreetId; //
+    Disconnect();
+    Open();
+    cbHouseNumbers.KeyValue := qHouseNumbers.FieldByName('id').AsInteger;
+  end;
+end;
+
+procedure TAddEditCounterForm.SetId(const Value: integer);
+begin
+  FId := Value;
+end;
+
+end.
+

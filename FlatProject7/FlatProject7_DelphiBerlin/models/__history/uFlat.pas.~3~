@@ -1,0 +1,20 @@
+unit uFlat;
+
+interface
+
+uses
+  uHouseNumber;
+
+type
+  TFlat = class
+  private
+  protected
+  public
+    property Id: integer;
+    property FlatNumber: integer;
+  end;
+
+implementation
+
+end.
+

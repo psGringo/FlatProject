@@ -43,4 +43,3 @@ C:\C#\FlatProject\FlatProject7\FlatProject7\bin\EntityFramework.dll
 C:\C#\FlatProject\FlatProject7\FlatProject7\bin\EntityFramework.SqlServer.dll
 C:\C#\FlatProject\FlatProject7\FlatProject7\bin\EntityFramework.xml
 C:\C#\FlatProject\FlatProject7\FlatProject7\bin\EntityFramework.SqlServer.xml
-C:\C#\FlatProject\FlatProject7\FlatProject7\obj\Debug\FlatProject7.csprojResolveAssemblyReference.cache

@@ -1,0 +1,61 @@
+object ChangeCountersHistoryForm: TChangeCountersHistoryForm
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'ChangeCountersHistoryForm'
+  ClientHeight = 346
+  ClientWidth = 553
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 553
+    Height = 346
+    Align = alClient
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+  end
+  object FDConnectionTemp: TFDConnection
+    Params.Strings = (
+      'Database=flat_db'
+      'User_Name=root'
+      'Password=masterkey'
+      'DriverID=MySQL')
+    Connected = True
+    Left = 48
+    Top = 104
+  end
+  object qHistory: TFDQuery
+    Connection = FDConnectionTemp
+    SQL.Strings = (
+      
+        'SELECT * FROM flat_db.countersupdatehistory where flats_id=:flat' +
+        's_id;')
+    Left = 80
+    Top = 160
+    ParamData = <
+      item
+        Name = 'FLATS_ID'
+        ParamType = ptInput
+      end>
+  end
+  object DSHistory: TDataSource
+    DataSet = qHistory
+    Left = 120
+    Top = 216
+  end
+end

@@ -1,0 +1,48 @@
+unit uCommon;
+
+interface
+
+uses
+  System.SysUtils, System.Classes;
+
+type
+  TCommon = class(TDataModule)
+  private
+
+    { Private declarations }
+  public
+    { Public declarations }
+    class function GetDoubleFromIntAndFrac(aInt, aFrac: integer): double;
+    class function GetLastInsertID(): integer;
+  end;
+
+var
+  Common: TCommon;
+
+implementation
+
+uses
+  FireDAC.Comp.Client, uDb;
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+class function TCommon.GetDoubleFromIntAndFrac(aInt, aFrac: integer): double;
+begin
+  Result := StrToFloat((aInt.ToString)) + StrToFloat((aFrac / 100).ToString); // Целая + дробная части
+end;
+
+class function TCommon.GetLastInsertID: integer;
+var
+  q: TFDQuery;
+begin
+  q := TFDQuery.Create(Self);
+  try
+
+  finally
+    q.Free();
+  end;
+end;
+
+end.
+
