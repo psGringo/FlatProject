@@ -33,7 +33,7 @@ type
     property Counter: TCounter read FCounter write SetCounter;
     property HouseNumber: THouseNumber read FHouseNumber write SetHouseNumber;
     property Street: TStreet read FStreet write SetStreet;
-    property IsFlatCounterAssociated:boolean read FIsFlatCounterAssociated write SetIsFlatCounterAssociated;
+    property IsAssociated:boolean read FIsFlatCounterAssociated write SetIsFlatCounterAssociated;
   published
   end;
 

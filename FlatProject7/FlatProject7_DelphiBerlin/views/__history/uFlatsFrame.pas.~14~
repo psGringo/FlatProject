@@ -1,0 +1,132 @@
+unit uFlatsFrame;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Vcl.ExtCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error,
+  FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool,
+  FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef,
+  FireDAC.VCLUI.Wait, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
+  FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.DBCtrls, Vcl.StdCtrls,
+  Vcl.AppEvnts,LDSLogger;
+
+type
+  TFlatsFrame = class(TFrame)
+    pTop: TPanel;
+    DBGrid: TDBGrid;
+    FDConnectionTemp: TFDConnection;
+    DSFlats: TDataSource;
+    qFlats: TFDQuery;
+    cbStreets: TDBLookupComboBox;
+    cbHouseNumbers: TDBLookupComboBox;
+    bFilter: TButton;
+    bFlushFilter: TButton;
+    qStreets: TFDQuery;
+    DSStreets: TDataSource;
+    qHouseNumbers: TFDQuery;
+    DSHouseNumbers: TDataSource;
+    pPanelTop: TPanel;
+    lStreets: TLabel;
+    lHouseNumbers: TLabel;
+    qFlatsFilter: TFDQuery;
+    DS: TDataSource;
+    bHistory: TButton;
+    procedure cbStreetsCloseUp(Sender: TObject);
+    procedure bFilterClick(Sender: TObject);
+    procedure bFlushFilterClick(Sender: TObject);
+    procedure bHistoryClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure Init();
+  end;
+
+implementation
+
+uses
+  uDb, //
+  uChangeCountersHistoryForm
+
+  ;
+
+{$R *.dfm}
+
+{ TFlatsFrame }
+
+procedure TFlatsFrame.bFilterClick(Sender: TObject);
+begin
+  with qFlatsFilter do
+  begin
+    Connection := DB.FDConnection;
+    CachedUpdates := true;
+    params.ParamValues['street_id'] := qStreets.FieldByName('id').AsInteger;
+    params.ParamValues['houseNumber_id'] := qHouseNumbers.FieldByName('id').AsInteger;
+    Disconnect();
+    Open();
+  end;
+  DSFlats.DataSet := qFlatsFilter;
+end;
+
+procedure TFlatsFrame.bFlushFilterClick(Sender: TObject);
+begin
+  qFlats.Disconnect();
+  qFlats.Open();
+  DSFlats.DataSet := qFlats;
+end;
+
+procedure TFlatsFrame.bHistoryClick(Sender: TObject);
+var
+  f: TChangeCountersHistoryForm;
+begin
+  f := TChangeCountersHistoryForm.Create(Self);
+  f.FlatID := qFlats.FieldByName('flatId').AsInteger;
+  f.Init();
+  f.Show();
+end;
+
+procedure TFlatsFrame.cbStreetsCloseUp(Sender: TObject);
+begin
+  with qHouseNumbers do
+  begin
+    Connection := Db.FDConnection;
+    CachedUpdates := true;
+    params.ParamValues['streets_id'] := qStreets.FieldByName('id').AsInteger;
+    Disconnect();
+    Open();
+    cbHouseNumbers.KeyValue := qHouseNumbers.FieldByName('id').AsInteger;
+  end;
+end;
+
+procedure TFlatsFrame.Init;
+begin
+  FDConnectionTemp.Connected := false;
+  with qFlats do
+  begin
+    Connection := Db.FDConnection;
+    Disconnect();
+    Open();
+  end;
+  with qStreets do
+  begin
+    Connection := Db.FDConnection;
+    CachedUpdates := true;
+    Disconnect();
+    Open();
+    cbStreets.KeyValue := qStreets.FieldByName('id').AsInteger;
+  end;
+  with qHouseNumbers do
+  begin
+    Connection := Db.FDConnection;
+    CachedUpdates := true;
+    params.ParamValues['streets_id'] := qStreets.FieldByName('id').AsInteger;
+    Disconnect();
+    Open();
+    cbHouseNumbers.KeyValue := qHouseNumbers.FieldByName('id').AsInteger;
+  end;
+end;
+
+end.
+

@@ -21,7 +21,7 @@ type
     constructor Create(AOwner: TComponent); override;
     property Id: integer read FId write SetId;
     property CounterOld: TCounter read FCounterOld write SetCounterOld;
-    property Counter: TCounter read FCounter write SetCounter;
+    property CounterNew: TCounter read FCounter write SetCounter;
     property Flat: TFlat read FFlat write SetFlat;
   end;
 

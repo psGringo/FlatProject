@@ -8,7 +8,11 @@ uses
   // my
   uDb, //
   uFlatsFrame, //
-  uCountersFrame, Vcl.ExtCtrls; //
+  uCountersFrame, //
+  LDSLogger, uCommon,
+  //
+  Vcl.ExtCtrls, //
+  Vcl.AppEvnts; //
 
 type
   TMainForm = class(TForm)
@@ -17,28 +21,46 @@ type
     tsCounters: TTabSheet;
     StatusBar: TStatusBar;
     Timer: TTimer;
+    ApplicationEvents: TApplicationEvents;
     procedure FormCreate(Sender: TObject);
     procedure TimerTimer(Sender: TObject);
+    procedure ApplicationEventsException(Sender: TObject; E: Exception);
   private
     { Private declarations }
+    FLDSLogger: TLDSLogger;
     FlatsFrame: TFlatsFrame;
     CountersFrame: TCountersFrame;
   public
     constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     { Public declarations }
   end;
 
 var
   MainForm: TMainForm;
 
+const
+  logFileName = 'log.txt';
+
 implementation
 
 {$R *.dfm}
+
+procedure TMainForm.ApplicationEventsException(Sender: TObject; E: Exception);
+begin
+  FLDSLogger.LogStr('error=' + E.Message, tlpError);
+end;
 
 constructor TMainForm.Create(AOwner: TComponent);
 begin
   inherited;
   ReportMemoryLeaksOnShutdown := true;
+end;
+
+destructor TMainForm.Destroy;
+begin
+  FLDSLogger.Free();
+  inherited;
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -58,6 +80,8 @@ begin
   CountersFrame.Align := alClient;
   CountersFrame.Init;
   CountersFrame.Show();
+  //
+  FLDSLogger := TLDSLogger.Create(logFileName);
 end;
 
 procedure TMainForm.TimerTimer(Sender: TObject);

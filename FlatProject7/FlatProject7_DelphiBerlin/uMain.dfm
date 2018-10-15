@@ -29,6 +29,10 @@ object MainForm: TMainForm
     object tsCounters: TTabSheet
       Caption = #1057#1095#1077#1090#1095#1080#1082#1080
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
   end
   object StatusBar: TStatusBar
@@ -45,5 +49,10 @@ object MainForm: TMainForm
     OnTimer = TimerTimer
     Left = 536
     Top = 88
+  end
+  object ApplicationEvents: TApplicationEvents
+    OnException = ApplicationEventsException
+    Left = 600
+    Top = 192
   end
 end

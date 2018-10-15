@@ -17,16 +17,19 @@ uses
   uStreet in 'models\uStreet.pas',
   uCountersUpdateHistory in 'models\uCountersUpdateHistory.pas',
   uCounterData in 'models\uCounterData.pas',
-  uChangeCountersHistoryForm in 'views\uChangeCountersHistoryForm.pas' {ChangeCountersHistoryForm};
+  uChangeCountersHistoryForm in 'views\uChangeCountersHistoryForm.pas' {ChangeCountersHistoryForm},
+  Vcl.Themes,
+  Vcl.Styles,
+  LDSLogger in 'LDSLogger.pas';
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
+  TStyleManager.TrySetStyle('Turquoise Gray');
   Application.CreateForm(TDb, Db);
   Application.CreateForm(TMainForm, MainForm);
-  Application.CreateForm(TCommon, Common);
   Application.Run;
 end.
 

@@ -37,12 +37,14 @@ object ChangeCountersHistoryForm: TChangeCountersHistoryForm
         Visible = True
       end
       item
+        Alignment = taCenter
         Expanded = False
         FieldName = 'oldCounterValue'
         Title.Caption = #1047#1085#1072#1095#1077#1085#1080#1077' '#1089#1090#1072#1088#1086#1075#1086' '#1089#1095#1077#1090#1095#1080#1082#1072
         Visible = True
       end
       item
+        Alignment = taCenter
         Expanded = False
         FieldName = 'oldSerialNumber'
         Title.Caption = #1057#1077#1088#1080#1081#1085#1099#1081' '#1085#1086#1084#1077#1088' '#1089#1090#1072#1088#1086#1075#1086' '#1089#1095#1077#1090#1095#1080#1082#1072
@@ -50,6 +52,7 @@ object ChangeCountersHistoryForm: TChangeCountersHistoryForm
         Visible = True
       end
       item
+        Alignment = taCenter
         Expanded = False
         FieldName = 'serialNumber'
         Title.Caption = #1058#1077#1082#1091#1097#1080#1081' '#1089#1077#1088#1080#1081#1085#1099#1081' '#1085#1086#1084#1077#1088

@@ -1,0 +1,88 @@
+unit uFLatCounter;
+
+interface
+
+uses
+  System.Classes, //
+  //
+  uFlat, //
+  uHouseNumber, //
+  uCounter, //
+  uStreet //
+;
+
+type
+  TFLatCounter = class(TComponent)
+  private
+    FFlat: TFlat;
+    FCounter: TCounter;
+    FStreet: TStreet;
+    FHouseNumber: THouseNumber;
+    FIsFlatCounterAssociated: boolean;
+    procedure SetFlat(const Value: TFlat);
+    procedure SetCounter(const Value: TCounter);
+    procedure SetHouseNumber(const Value: THouseNumber);
+    procedure SetStreet(const Value: TStreet);
+    procedure SetIsFlatCounterAssociated(const Value: boolean);
+  protected
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    //
+    property Flat: TFlat read FFlat write SetFlat;
+    property Counter: TCounter read FCounter write SetCounter;
+    property HouseNumber: THouseNumber read FHouseNumber write SetHouseNumber;
+    property Street: TStreet read FStreet write SetStreet;
+    property IsFlatCounterAssociated:boolean read FIsFlatCounterAssociated write SetIsFlatCounterAssociated;
+  published
+  end;
+
+implementation
+
+{ TFlatHouseNumber }
+
+constructor TFLatCounter.Create(AOwner: TComponent);
+begin
+  inherited;
+  Flat := TFlat.Create(Self);
+  FCounter := TCounter.Create(Self);
+  FStreet := TStreet.Create(Self);
+  FHouseNumber := THouseNumber.Create(Self);
+end;
+
+destructor TFLatCounter.Destroy;
+begin
+  Flat.Free();
+  FCounter.Free();
+  FStreet.Free();
+  FHouseNumber.Free();
+  inherited;
+end;
+
+procedure TFLatCounter.SetCounter(const Value: TCounter);
+begin
+  FCounter := Value;
+end;
+
+procedure TFLatCounter.SetFlat(const Value: TFlat);
+begin
+  FFlat := Value;
+end;
+
+procedure TFLatCounter.SetHouseNumber(const Value: THouseNumber);
+begin
+  FHouseNumber := Value;
+end;
+
+procedure TFLatCounter.SetIsFlatCounterAssociated(const Value: boolean);
+begin
+  FIsFlatCounterAssociated := Value;
+end;
+
+procedure TFLatCounter.SetStreet(const Value: TStreet);
+begin
+  FStreet := Value;
+end;
+
+end.
+

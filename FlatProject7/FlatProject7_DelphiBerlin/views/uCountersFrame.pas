@@ -62,15 +62,60 @@ uses
   uAddNewCounterData, //
   uCommon, //
   uFlatCounter, //
-  uCountersUpdateHistory; //
+  uCountersUpdateHistory, uFlat; //
 
 procedure TCountersFrame.bAddClick(Sender: TObject);
 var
-  f: TAddEditCounterForm;
   c: TCounter;
-  fh: TFLatCounter;
-  h: TCountersUpdateHistory;
+  f: TAddEditCounterForm;
+  fc: TFLatCounter;
+  fcChosen: TFLatCounter;
+  counterId: Integer;
+  flatChosen: TFlat;
 begin
+  flatChosen := TFlat.Create(Self);
+  f := TAddEditCounterForm.Create(Self);
+  c := TCounter.Create(Self);
+  try
+    f.Init();
+    with f do
+    begin
+      // update view
+     // eSerialNumber.Text := fc.Counter.SerialNumber;
+      dtpLast.DateTime := Now(); // fc.Counter.LastCheckDate;
+      dtpNext.DateTime := Now(); //fc.Counter.NextCheckDate;
+      if f.ShowModal = mrOk then
+      begin
+      // updating model
+        c.SerialNumber := eSerialNumber.Text;
+        c.LastCheckDate := dtpLast.DateTime;
+        c.NextCheckDate := dtpNext.DateTime;
+        counterId := TCountersController.InsertCounter(c);
+        c.Id := counterId;
+        //
+        if f.cbIsAssociateToFlat.Checked then
+        begin
+          fc := TCountersController.GetAssociationToFlat(counterId);
+          flatChosen.Id := f.qFlatNumbers.FieldByName('id').AsInteger;
+          fcChosen := TCountersController.GetAssociationToCounter(flatChosen);
+          TCountersController.AssociateFlatToCounter(fc, fcChosen);
+        // associating flat and counter
+        end;
+      end;
+      qCounters.Disconnect();
+      qCounters.Open();
+      DSCounters.DataSet := qCounters;
+    end;
+  finally
+    c.Free();
+    flatChosen.Free();
+    fc.Free();
+    fcChosen.Free();
+    f.Free();
+    fc.Free();
+  end;
+
+ {
   f := TAddEditCounterForm.Create(Self);
   f.Init();
   c := TCounter.Create(Self);
@@ -84,14 +129,16 @@ begin
       c.LastCheckDate := f.dtpLast.DateTime;
       c.NextCheckDate := f.dtpNext.DateTime;
       c.Id := TCountersController.InsertCounter(c); //
+
+
       // association to flat
       if f.cbIsAssociateToFlat.Checked then
       begin
         fh.Flat.Id := f.qFlatNumbers.FieldByName('id').AsInteger;
         fh.Counter.Id := c.Id;
-        TCountersController.AssociateFlatToCounter(fh);
+//        TCountersController.AssociateFlatToCounter(fh);
         // add history
-        h.Counter := c;
+        h.CounterNew := c;
         h.Flat.Id := f.qFlatNumbers.FieldByName('id').AsInteger;
         h.CounterOld.Id := -1; // no old counter
         TCountersController.LogAssociatonFlatToCounter(h);
@@ -107,6 +154,8 @@ begin
     fh.Free();
     h.Free();
   end;
+}
+
 end;
 
 procedure TCountersFrame.bAddNewDataClick(Sender: TObject);
@@ -159,29 +208,25 @@ end;
 procedure TCountersFrame.bEditClick(Sender: TObject);
 var
   c: TCounter;
-  oldC: TCounter;
   f: TAddEditCounterForm;
   fc: TFLatCounter;
-  h, h2: TCountersUpdateHistory;
+  fcChosen: TFLatCounter;
   anotherCounterId: integer;
   counterId: Integer;
-  anotherFlatId: integer;
+  flatChosen: TFlat;
 begin
-  // current counterId
-  counterId := qCounters.FieldByName('id').AsInteger;
-  //
-  c := TCountersController.GetCounter(counterId);
+  flatChosen := TFlat.Create(Self);
   f := TAddEditCounterForm.Create(Self);
-  h := TCountersUpdateHistory.Create(Self);
-  h2 := TCountersUpdateHistory.Create(Self);
-  oldC := nil;
-  fc := nil;
   try
     f.Init();
     // проверяем ассоциацию счетчика с квартирой
-    fc := TCountersController.GetAssociationToFlat(c);
-    if fc.IsFlatCounterAssociated then
+    counterId := qCounters.FieldByName('id').AsInteger;
+    fc := TCountersController.GetAssociationToFlat(counterId);
+    if (not fc.IsAssociated) then
+      fc.Counter := TCountersController.GetCounter(counterId); // if no association
+    if fc.IsAssociated then
     begin
+      // Заполняем списки
       f.cbIsAssociateToFlat.Checked := true;
       f.cbStreets.KeyValue := fc.Street.Id;
       // дома
@@ -190,123 +235,42 @@ begin
       // квартиры
       f.LoadFlatsInList(fc.HouseNumber.Id);
       f.cbFlatNumbers.KeyValue := fc.Flat.Id;
-      // для лога истрии
-      h.Counter := c; // new counter
     end;
     with f do
     begin
       // update view
-      eSerialNumber.Text := c.SerialNumber;
-      dtpLast.DateTime := c.LastCheckDate;
-      dtpNext.DateTime := c.NextCheckDate;
+      eSerialNumber.Text := fc.Counter.SerialNumber;
+      dtpLast.DateTime := fc.Counter.LastCheckDate;
+      dtpNext.DateTime := fc.Counter.NextCheckDate;
       if f.ShowModal = mrOk then
       begin
-      // обновляем модель счетчика из представления
-        c.SerialNumber := eSerialNumber.Text;
-        c.LastCheckDate := dtpLast.DateTime;
-        c.NextCheckDate := dtpNext.DateTime;
-        TCountersController.Update(c, qCounters.FieldByName('id').AsInteger);
-        qCounters.Disconnect();
-        qCounters.Open();
-        DSCounters.DataSet := qCounters;
-        // log in history
-        // take counter from new flat - this will be old counter in our model
-        // if new counter for this flat
-        if f.qFlatNumbers.FieldByName('counters_id').IsNull then
-          anotherCounterId := -1
-        else
-          anotherCounterId := f.qFlatNumbers.FieldByName('counters_id').AsInteger;
-        // Если выбрали другую квартиру - ассоциируем счетчик с новой выбранной
-        // квартирой
-        if ((anotherCounterId <> c.id) and (f.cbIsAssociateToFlat.Checked)) then
+      // updating model from view
+        fc.Counter.SerialNumber := eSerialNumber.Text;
+        fc.Counter.LastCheckDate := dtpLast.DateTime;
+        fc.Counter.NextCheckDate := dtpNext.DateTime;
+        TCountersController.Update(fc.Counter, qCounters.FieldByName('id').AsInteger);
+        // associating flat and counter
+        if f.cbIsAssociateToFlat.Checked then
         begin
-          // updating association
-          anotherFlatId := f.qFlatNumbers.FieldByName('id').AsInteger;
-         // Cлучаи
-         // 1) Текущий Счетчик уже ассоциирован с квартирой, а в выбранной
-         // квартире уже свой ассоциированный счетчик, тогда предложить
-         // их поменять местами
-          if (fc.IsFlatCounterAssociated) //
-            and (TCountersController.IsFlatHasCounter(anotherFlatId)) then //
-          begin
-            case Application.MessageBox('В выбранной квартире уже есть другой счетчик. Поменять счетчики местами?', 'Сообщение системы', MB_YESNO + MB_ICONQUESTION) of
-              IDYES:
-                begin
-                  // exchange counters in flats
-                  TCountersController.ExchangeCountersInFlats(c.id, anotherCounterId);
-                  // Записываем историю замены одного счетчика
-                  oldC := TCountersController.GetCounter(anotherCounterId);
-                  h.CounterOld := oldC;
-                  h.Flat.Id := f.qFlatNumbers.FieldByName('id').AsInteger;
-                  TCountersController.LogAssociatonFlatToCounter(h);
-                  // И теперь наоборот
-                  h2.Counter := oldC;
-                  h2.CounterOld := c;
-                  h2.Flat.Id := fc.Flat.Id;
-                  TCountersController.LogAssociatonFlatToCounter(h2);
-                end;
-              IDNO:
-                begin
-                  exit;
-                end;
-            end;
-          end
-          else
-         // 2) Текущий счетчик не ассоциирован с квартирой,
-         // В выбранной квартире уже есть счетчик, тогда предложить
-         // перезаписать
-if (not fc.IsFlatCounterAssociated) //
-  and (TCountersController.IsFlatHasCounter(anotherFlatId)) then //
-          begin
-            case Application.MessageBox('В выбранной квартире уже есть счетчик, перезаписать счетчик?', 'Сообщение системы', MB_YESNO + MB_ICONQUESTION) of
-              IDYES:
-                begin
-                  // rewrite counter un another flat
-                  TCountersController.UpdateCounterInFlat(c.Id, anotherFlatId);
-                  // Записываем историю замены счетчиков
-                  oldC := TCountersController.GetCounter(anotherCounterId);
-                  h.CounterOld := oldC;
-                  h.Counter := c;
-                  h.Flat.Id := f.qFlatNumbers.FieldByName('id').AsInteger;
-                  TCountersController.LogAssociatonFlatToCounter(h);
-                end;
-              IDNO:
-                begin
-                  exit;
-                end;
-            end;
-
-          end
-          //3) Текущий счетчик не ассоциирован с квартирой,
-          //В выбранной квартире нет счетчика, тогда просто записываем
-          else if (not TCountersController.IsCounterAssociated(counterId)) //
-            and (not TCountersController.IsFlatHasCounter(fc.Flat.Id)) then //
-          begin
-            //TCountersController.AssociateFlatToCounter(fc);
-            TCountersController.UpdateCounterInFlat(c.Id, anotherFlatId);
-          // Записываем историю замены счетчиков
-            h.Counter := c;
-            if anotherCounterId = -1 then
-              oldC := nil
-            else
-              oldC := TCountersController.GetCounter(anotherCounterId);
-            h.CounterOld := oldC;
-            h.Flat.Id := f.qFlatNumbers.FieldByName('id').AsInteger;
-            TCountersController.LogAssociatonFlatToCounter(h);
-          end;
+          flatChosen.Id := f.qFlatNumbers.FieldByName('id').AsInteger;
+          fcChosen := TCountersController.GetAssociationToCounter(flatChosen);
+          TCountersController.AssociateFlatToCounter(fc, fcChosen);
+        end
+        else if (not f.cbIsAssociateToFlat.Checked) and (fc.IsAssociated) then
+        begin
+          // brake association
+          TCountersController.BrakeAssociation(fc);
         end;
       end;
       qCounters.Disconnect();
       qCounters.Open();
+      DSCounters.DataSet := qCounters;
     end;
   finally
-    c.Free;
+    flatChosen.Free();
     f.Free();
-    h.Free();
-    if oldC <> nil then
-      oldC.Free();
-    if fc <> nil then
-      fc.Free();
+    fc.Free();
+    fcChosen.Free();
   end;
 end;
 

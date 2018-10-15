@@ -1,0 +1,11 @@
+unit uConstants;
+
+interface
+
+const
+  logFileName = 'log.txt';
+
+implementation
+
+end.
+

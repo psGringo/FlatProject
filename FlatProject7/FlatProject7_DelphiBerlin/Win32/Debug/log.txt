@@ -1,0 +1,10 @@
+15.10.2018 09:52:24.182 [ошиб] error=[FireDAC][Phys][MySQL] Cannot add or update a child row: a foreign key constraint fails (`flat_db`.`countersupdatehistory`, CONSTRAINT `fk_countersUpdateHistory_counters2` FOREIGN KEY (`countersOld_id`) REFERENCES `counters` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+15.10.2018 10:04:03.906 [ошиб] error=[FireDAC][Phys][MySQL] Cannot add or update a child row: a foreign key constraint fails (`flat_db`.`countersupdatehistory`, CONSTRAINT `fk_countersUpdateHistory_counters2` FOREIGN KEY (`countersOld_id`) REFERENCES `counters` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+15.10.2018 12:23:04.775 [ошиб] error=Access violation at address 00408752 in module 'FlatProject.exe'. Read of address 00000044
+15.10.2018 12:23:23.189 [ошиб] error=Access violation at address 00408752 in module 'FlatProject.exe'. Read of address 00000044
+15.10.2018 12:28:33.463 [ошиб] error=Access violation at address 00408752 in module 'FlatProject.exe'. Read of address 00000215
+15.10.2018 12:28:44.812 [ошиб] error=[FireDAC][Phys][MySQL] Cannot add or update a child row: a foreign key constraint fails (`flat_db`.`flats`, CONSTRAINT `fk_flats_counters1` FOREIGN KEY (`counters_id`) REFERENCES `counters` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION)
+15.10.2018 12:28:44.817 [ошиб] error=[FireDAC][Phys][MySQL] Cannot add or update a child row: a foreign key constraint fails (`flat_db`.`countersupdatehistory`, CONSTRAINT `fk_countersUpdateHistory_counters1` FOREIGN KEY (`counters_id`) REFERENCES `counters` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+15.10.2018 12:28:44.834 [ошиб] error=Access violation at address 00408752 in module 'FlatProject.exe'. Read of address 00000215
+15.10.2018 12:34:40.934 [ошиб] error=Access violation at address 00408752 in module 'FlatProject.exe'. Read of address 00000215
+15.10.2018 12:37:27.721 [ошиб] error=Invalid pointer operation

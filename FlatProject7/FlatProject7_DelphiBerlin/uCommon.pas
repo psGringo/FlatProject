@@ -8,8 +8,6 @@ uses
 type
   TCommon = class(TDataModule)
   private
-
-
     { Private declarations }
   public
     { Public declarations }
@@ -17,9 +15,6 @@ type
     class function GetLastInsertID(): integer;
     class function GetRestOfFloat(ASomeFloat: real): integer; static;
   end;
-
-var
-  Common: TCommon;
 
 implementation
 

@@ -9,7 +9,8 @@ uses
   FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool,
   FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL, FireDAC.Phys.MySQLDef,
   FireDAC.VCLUI.Wait, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
-  FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.DBCtrls, Vcl.StdCtrls;
+  FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.DBCtrls, Vcl.StdCtrls,
+  Vcl.AppEvnts, LDSLogger;
 
 type
   TFlatsFrame = class(TFrame)
@@ -18,7 +19,6 @@ type
     FDConnectionTemp: TFDConnection;
     DSFlats: TDataSource;
     qFlats: TFDQuery;
-    cbFlatNumbers: TDBLookupComboBox;
     cbStreets: TDBLookupComboBox;
     cbHouseNumbers: TDBLookupComboBox;
     bFilter: TButton;
@@ -27,20 +27,15 @@ type
     DSStreets: TDataSource;
     qHouseNumbers: TFDQuery;
     DSHouseNumbers: TDataSource;
-    qFlatNumbers: TFDQuery;
-    DSFlatNumbers: TDataSource;
     pPanelTop: TPanel;
     lStreets: TLabel;
     lHouseNumbers: TLabel;
-    lFlats: TLabel;
     qFlatsFilter: TFDQuery;
     DS: TDataSource;
     bHistory: TButton;
     procedure cbStreetsCloseUp(Sender: TObject);
-    procedure cbHouseNumbersCloseUp(Sender: TObject);
     procedure bFilterClick(Sender: TObject);
     procedure bFlushFilterClick(Sender: TObject);
-    procedure bChangeCounterClick(Sender: TObject);
     procedure bHistoryClick(Sender: TObject);
   private
     { Private declarations }
@@ -59,11 +54,6 @@ uses
 
 { TFlatsFrame }
 
-procedure TFlatsFrame.bChangeCounterClick(Sender: TObject);
-begin
-//
-end;
-
 procedure TFlatsFrame.bFilterClick(Sender: TObject);
 begin
   with qFlatsFilter do
@@ -72,7 +62,6 @@ begin
     CachedUpdates := true;
     params.ParamValues['street_id'] := qStreets.FieldByName('id').AsInteger;
     params.ParamValues['houseNumber_id'] := qHouseNumbers.FieldByName('id').AsInteger;
-    params.ParamValues['flatNumber_id'] := qFlatNumbers.FieldByName('id').AsInteger;
     Disconnect();
     Open();
   end;
@@ -91,22 +80,9 @@ var
   f: TChangeCountersHistoryForm;
 begin
   f := TChangeCountersHistoryForm.Create(Self);
-  f.FlatID := qFlats.FieldByName('flatId').AsInteger;
+  f.FlatID := DSFlats.DataSet.FieldByName('flatId').AsInteger;
   f.Init();
   f.Show();
-end;
-
-procedure TFlatsFrame.cbHouseNumbersCloseUp(Sender: TObject);
-begin
-  with qFlatNumbers do
-  begin
-    Connection := Db.FDConnection;
-    CachedUpdates := true;
-    params.ParamValues['houseNumbers_id'] := qHouseNumbers.FieldByName('id').AsInteger;
-    Disconnect();
-    Open();
-    cbFlatNumbers.KeyValue := qFlatNumbers.FieldByName('id').AsInteger;
-  end;
 end;
 
 procedure TFlatsFrame.cbStreetsCloseUp(Sender: TObject);
@@ -119,15 +95,6 @@ begin
     Disconnect();
     Open();
     cbHouseNumbers.KeyValue := qHouseNumbers.FieldByName('id').AsInteger;
-  end;
-  with qFlatNumbers do
-  begin
-    Connection := Db.FDConnection;
-    CachedUpdates := true;
-    params.ParamValues['houseNumbers_id'] := qHouseNumbers.FieldByName('id').AsInteger;
-    Disconnect();
-    Open();
-    cbFlatNumbers.KeyValue := qFlatNumbers.FieldByName('id').AsInteger;
   end;
 end;
 
@@ -156,15 +123,6 @@ begin
     Disconnect();
     Open();
     cbHouseNumbers.KeyValue := qHouseNumbers.FieldByName('id').AsInteger;
-  end;
-  with qFlatNumbers do
-  begin
-    Connection := Db.FDConnection;
-    CachedUpdates := true;
-    params.ParamValues['houseNumbers_id'] := qHouseNumbers.FieldByName('id').AsInteger;
-    Disconnect();
-    Open();
-    cbFlatNumbers.KeyValue := qFlatNumbers.FieldByName('id').AsInteger;
   end;
 end;
 
