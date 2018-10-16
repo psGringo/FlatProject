@@ -112,7 +112,7 @@ begin
     fc.Free();
     fcChosen.Free();
     f.Free();
-    fc.Free();
+    fc.Free(); // << Error here
   end;
 
  {
@@ -173,8 +173,8 @@ begin
        // insert new record
       if (not TCountersController.IsNewValueOk(f.CounterID, newValue)) then
       begin
-        Application.MessageBox('Íîâîå çíà÷åíèå äîëæíî áûòü áîëüøå ïðåäûäóùåãî', //
-          'Ñîîáùåíèå ñèñòåìû', MB_OK + MB_ICONSTOP);
+        Application.MessageBox('ÃÃ®Ã¢Ã®Ã¥ Ã§Ã­Ã Ã·Ã¥Ã­Ã¨Ã¥ Ã¤Ã®Ã«Ã¦Ã­Ã® Ã¡Ã»Ã²Ã¼ Ã¡Ã®Ã«Ã¼Ã¸Ã¥ Ã¯Ã°Ã¥Ã¤Ã»Ã¤Ã³Ã¹Ã¥Ã£Ã®', //
+          'Ã‘Ã®Ã®Ã¡Ã¹Ã¥Ã­Ã¨Ã¥ Ã±Ã¨Ã±Ã²Ã¥Ã¬Ã»', MB_OK + MB_ICONSTOP);
         exit;
       end;
       TCountersController.InsertCounterData(f.CounterID, newValue);
@@ -190,7 +190,7 @@ procedure TCountersFrame.bDeleteClick(Sender: TObject);
 var
   buttonSelected: Integer;
 begin
-  case Application.MessageBox('Óäàëèòü ñ÷åò÷èê è âñå åãî äàííûå?', 'Ñîîáùåíèå ñèñòåìû', MB_YESNO + MB_ICONQUESTION) of
+  case Application.MessageBox('Ã“Ã¤Ã Ã«Ã¨Ã²Ã¼ Ã±Ã·Ã¥Ã²Ã·Ã¨Ãª Ã¨ Ã¢Ã±Ã¥ Ã¥Ã£Ã® Ã¤Ã Ã­Ã­Ã»Ã¥?', 'Ã‘Ã®Ã®Ã¡Ã¹Ã¥Ã­Ã¨Ã¥ Ã±Ã¨Ã±Ã²Ã¥Ã¬Ã»', MB_YESNO + MB_ICONQUESTION) of
     IDYES:
       begin
         TCountersController.Delete(qCounters.FieldByName('id').AsInteger);
@@ -219,20 +219,20 @@ begin
   f := TAddEditCounterForm.Create(Self);
   try
     f.Init();
-    // ïðîâåðÿåì àññîöèàöèþ ñ÷åò÷èêà ñ êâàðòèðîé
+    // Ã¯Ã°Ã®Ã¢Ã¥Ã°Ã¿Ã¥Ã¬ Ã Ã±Ã±Ã®Ã¶Ã¨Ã Ã¶Ã¨Ã¾ Ã±Ã·Ã¥Ã²Ã·Ã¨ÃªÃ  Ã± ÃªÃ¢Ã Ã°Ã²Ã¨Ã°Ã®Ã©
     counterId := qCounters.FieldByName('id').AsInteger;
     fc := TCountersController.GetAssociationToFlat(counterId);
     if (not fc.IsAssociated) then
       fc.Counter := TCountersController.GetCounter(counterId); // if no association
     if fc.IsAssociated then
     begin
-      // Çàïîëíÿåì ñïèñêè
+      // Ã‡Ã Ã¯Ã®Ã«Ã­Ã¿Ã¥Ã¬ Ã±Ã¯Ã¨Ã±ÃªÃ¨
       f.cbIsAssociateToFlat.Checked := true;
       f.cbStreets.KeyValue := fc.Street.Id;
-      // äîìà
+      // Ã¤Ã®Ã¬Ã 
       f.LoadHouseNumbersInList(fc.Street.Id);
       f.cbHouseNumbers.KeyValue := fc.HouseNumber.Id;
-      // êâàðòèðû
+      // ÃªÃ¢Ã Ã°Ã²Ã¨Ã°Ã»
       f.LoadFlatsInList(fc.HouseNumber.Id);
       f.cbFlatNumbers.KeyValue := fc.Flat.Id;
     end;
