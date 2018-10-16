@@ -112,7 +112,7 @@ begin
     fc.Free();
     fcChosen.Free();
     f.Free();
-    fc.Free(); // << Error here
+    //fc.Free(); // << Error here
   end;
 
  {
